@@ -25,7 +25,7 @@ class eth_tb extends uvm_env;
     uvm_config_db#(eth_agent_config)::set(this, "*eth_secondary*", "cfg", eth_sec_cfg );
 
     eth_primary    = eth_env::type_id::create("eth_primary", this);
-    eth_secondary  = eth_env::type_id::create("eth_secondary" , this);
+    //eth_secondary  = eth_env::type_id::create("eth_secondary" , this);
 
     sb = eth_tb_scoreboard::type_id::create("sb", this);
   endfunction

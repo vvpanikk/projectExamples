@@ -18,18 +18,26 @@ module tb_eth;
   import eth_tb_pkg::*;
   `include "tb_eth_testlib.svh"
   logic clk;
+  logic rst_n;
   
   // Instantiate the interface
-  eth_if eth_if_i(clk);
+  eth_if eth_if_i(clk, rst_n);
   
   // Clk generator
   initial begin
     clk = 0;
     forever #5 clk = ~clk;
   end
-  
+ initial begin
+    rst_n = 1;
+    #1;
+    rst_n = 0;
+    #1;
+    rst_n = 1;
+  end
+ 
   initial begin
-
+    eth_if_i.in_ready = 1;
     begin
       uvm_component c;
       c = uvm_root::get();

@@ -31,26 +31,35 @@ class eth_monitor extends uvm_monitor;
 
   virtual task run_phase(uvm_phase phase);
     forever begin      
-      @(posedge vif.clk);   
-      while(vif.in_ready && vif.in_valid) begin
-        if (vif.in_startofpayload == 1)
+      @(vif.cb_mon);   
+      while(vif.cb_mon.in_ready && vif.cb_mon.in_valid) begin
+        if (vif.cb_mon.in_startofpayload == 1)
           in_data = new[1];
         else
           in_data = new[in_data.size()+1](in_data);
 
-        in_data[in_data.size()-1] = vif.in_data;
-        if (vif.in_endofpayload == 1)
+        in_data[in_data.size()-1] = vif.cb_mon.in_data;
+
+        if (vif.cb_mon.in_endofpayload == 1) begin
+           `uvm_info("ENV", $sformatf("eop detected"), UVM_HIGH)
+           foreach (in_data[j])
+              `uvm_info("ENV", $sformatf("packed word:%h", in_data[j]), UVM_HIGH)
+
+           trans = eth_trans::type_id::create("trans", this);
+           packer = new;
+           packer.big_endian = 1;
+           packer.count = 0;
+
+           in_data_bits = {>>{in_data}};
+           num_bits = trans.unpack(in_data_bits, packer);
+     
+           `uvm_info("ENV", $sformatf("%s seq item \n:%s", get_full_name(), trans.sprint()), UVM_LOW)
+           //analysis_port.write(trans);
            break;
-        @(posedge vif.clk);   
+        end
+        @(vif.cb_mon);   
       end
 
-      trans = eth_trans::type_id::create("trans", this);
-      packer = new;
-      in_data_bits = {>>{in_data}};
-      num_bits = trans.unpack(in_data_bits, packer);
-
-      `uvm_info("ENV", $sformatf("%s seq item \n:%s", get_full_name(), trans.sprint()), UVM_NONE)
-      analysis_port.write(trans);
    end
    
   endtask : run_phase
