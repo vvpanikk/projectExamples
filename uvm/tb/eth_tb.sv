@@ -8,7 +8,9 @@ class eth_tb extends uvm_env;
   eth_env  eth_primary;
   eth_env  eth_secondary;
 
+  eth_tb_ref_model  ref_model;
   eth_tb_scoreboard sb;
+
   function new(string name, uvm_component parent);
     super.new(name, parent);
   endfunction
@@ -28,10 +30,15 @@ class eth_tb extends uvm_env;
     //eth_secondary  = eth_env::type_id::create("eth_secondary" , this);
 
     sb = eth_tb_scoreboard::type_id::create("sb", this);
+    ref_model = eth_tb_ref_model::type_id::create("ref_model", this);
   endfunction
 
   function void connect_phase(uvm_phase phase);
-     eth_primary.agent.monitor.analysis_port.connect(sb.primary_analysis_export);
+     eth_primary.agent.monitor.analysis_port.connect(sb.act_eth_in_export);
+     eth_primary.agent.monitor.analysis_port.connect(ref_model.eth_in_analysis_export);
+    
+     ref_model.apb_out_analysis_port.connect(sb.exp_apb_out_export);
+
   endfunction
 
 endclass

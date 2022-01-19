@@ -20,10 +20,10 @@ class simple_bringup_vseq extends eth_tb_base_vseq;
    eth_pass_through_seq    pt_seq;
    virtual task body();
       //no license for randomization `uvm_do_on(reg_wr_seq, p_sequencer.eth_seqr)
-      //`uvm_create_on(reg_wr_seq, p_sequencer.eth_seqr)
-      //`uvm_send(reg_wr_seq)
-      `uvm_create_on(pt_seq, p_sequencer.eth_seqr)
-      `uvm_send(pt_seq)
+      `uvm_create_on(reg_wr_seq, p_sequencer.eth_seqr)
+      `uvm_send(reg_wr_seq)
+      //`uvm_create_on(pt_seq, p_sequencer.eth_seqr)
+      //`uvm_send(pt_seq)
       //`uvm_do_on(p_sequencer.eth_seqr)
       #100;
    endtask

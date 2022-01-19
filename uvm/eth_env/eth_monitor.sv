@@ -54,7 +54,7 @@ class eth_monitor extends uvm_monitor;
            num_bits = trans.unpack(in_data_bits, packer);
      
            `uvm_info("ENV", $sformatf("%s seq item \n:%s", get_full_name(), trans.sprint()), UVM_LOW)
-           //analysis_port.write(trans);
+           analysis_port.write(trans);
            break;
         end
         @(vif.cb_mon);   

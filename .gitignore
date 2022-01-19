@@ -1,4 +1,5 @@
 log
+*.log
 *wlf
 *vstf
 uvm/sim/work/*

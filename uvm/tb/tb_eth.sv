@@ -8,6 +8,7 @@ https://www.youtube.com/watch?v=Qn6SvG-Kya0
 `include "uvm_macros.svh"
 `include "eth_if.sv"
 `include "eth_pkg.svh"
+`include "apb_pkg.svh"
 `include "eth_tb_pkg.svh"
 
 // The top module that contains the DUT and interface.
@@ -15,6 +16,7 @@ https://www.youtube.com/watch?v=Qn6SvG-Kya0
 module tb_eth;
   import uvm_pkg::*;
   import eth_pkg::*;
+  import apb_pkg::*;
   import eth_tb_pkg::*;
   `include "tb_eth_testlib.svh"
   logic clk;
